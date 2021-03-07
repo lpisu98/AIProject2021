@@ -10,8 +10,8 @@ class City:
 
 class Node:
 
-    def __init__(self):
-        self.state = None
+    def __init__(self, state = None):
+        self.state = state
         self.parent_node = None
         self.children_nodes = []
         self.action = ""
@@ -38,13 +38,15 @@ def treeSearch(problem):
         if(problem.goal_test(node) == True):
             return node
 
-        fringe.append(expand(node, problem), fringe)
+        for n in expand(node, problem):
+            fringe.append(n)
+
 
 def expand(node, problem):
     successors = []
     for (action, result) in problem.successor_fn(node.state):
         n = Node()
-        n.state = result
+        n.state = result[0]
         n.parent_node = node
         n.action = action
         n.path_cost = node.path_cost + problem.step_cost(node, action)
@@ -56,10 +58,17 @@ def expand(node, problem):
 
 def SF(state):
     res = []
-    print(state.neighbors[0])
     for neighbor in state.neighbors:
-        info = (neighbor.name, neighbor)
+        info = (neighbor[0].name, neighbor)
         res.append(info)
+
+    return res
+
+def step_cost(node, action):
+    for neighbor in node.state.neighbors:
+        if(neighbor[0].name == action):
+            return neighbor[1]
+    return -1
 
 a = City("A")
 b = City("B")
@@ -72,7 +81,8 @@ c.addNeighbor(d, 6)
 
 problem = Problem()
 problem.initial_state = a
-problem.goal_test = lambda s : s.name == "D"
-print(SF(a))
+problem.goal_test = lambda n : n.state.name == "D"
+problem.successor_fn = SF
+problem.step_cost = step_cost
 
-
+print(treeSearch(problem))
