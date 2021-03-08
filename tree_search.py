@@ -15,6 +15,7 @@ class Problem:
         self.goal_test = None
         self.successor_fn = None
         self.step_cost = None
+        self.heuristic_fn = None
 
 def treeSearch(problem):
     fringe = []
@@ -35,12 +36,22 @@ def treeSearch(problem):
 def aStarSearch(problem):
     fringe = []
     fringe.append(Node(problem.initial_state))
-
+    min_node = None
+    min_num = 0
     while 1:
         if(len(fringe) == 0):
             return -1
 
-        node = fringe.pop(0)
+        min_node = fringe[0]
+        min_num = min_node.path_cost + problem.heuristic_fn(fringe[0].state)
+        for n in fringe[1:]:
+            temp = problem.heuristic_fn(n.state)+n.path_cost
+            if(temp < min_num):
+                min_node = n
+                min_num = temp
+
+        node = min_node
+        fringe.remove(node)
         print("Expanding ", node.state.name)
         if(problem.goal_test(node) == True):
             return node

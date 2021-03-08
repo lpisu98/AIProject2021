@@ -1,88 +1,65 @@
-class City:
+from route_finding import City, step_cost, successor_fn, heuristic_fn
+from tree_search import Problem, treeSearch, aStarSearch
 
-    def __init__(self, name):
-        self.name = name
-        self.neighbors = []
+oradea = City("Oradea")
+zerind = City("Zerind")
+arad = City("Arad")
+timisoara = City("Timisoara")
+lugoj = City("Lugoj")
+mehadia = City("Mehadia")
+drobeta = City("Drobeta")
+sibiu = City("Sibiu")
+rimnicu_vilcea = City("Rimnicu Vilcea")
+craiova = City("Craiova")
+fagaras = City("Fagaras")
+pitesti = City("Pitesti")
+bucharest = City("Bucharest")
+giurgiu = City("Giurgiu")
+neamt = City("Neamt")
+iasi = City("Iasi")
+vaslui = City("Vaslui")
+urziceni = City("Urziceni")
+hirsova = City("Hirsova")
+eforie = City("Eforie")
 
-    def addNeighbor(self, city, cost):
-        city.neighbors.append((city, cost))
-        self.neighbors.append((city, cost))
+oradea.addNeighbor(zerind, 71)
+oradea.addNeighbor(sibiu, 151)
+zerind.addNeighbor(arad, 75)
+arad.addNeighbor(sibiu, 140)
+arad.addNeighbor(timisoara, 118)
+timisoara.addNeighbor(lugoj, 111)
+lugoj.addNeighbor(mehadia, 70)
+mehadia.addNeighbor(drobeta, 75)
+drobeta.addNeighbor(craiova, 120)
+sibiu.addNeighbor(fagaras, 99)
+sibiu.addNeighbor(rimnicu_vilcea, 80)
+rimnicu_vilcea.addNeighbor(craiova, 146)
+rimnicu_vilcea.addNeighbor(pitesti, 97)
+craiova.addNeighbor(pitesti, 138)
+fagaras.addNeighbor(bucharest, 211)
+pitesti.addNeighbor(bucharest, 101)
+bucharest.addNeighbor(giurgiu, 90)
+bucharest.addNeighbor(urziceni, 98)
+neamt.addNeighbor(iasi, 87)
+iasi.addNeighbor(vaslui, 92)
+vaslui.addNeighbor(urziceni, 142)
+urziceni.addNeighbor(hirsova, 98)
+hirsova.addNeighbor(eforie, 86)
 
-class Node:
-
-    def __init__(self, state = None):
-        self.state = state
-        self.parent_node = None
-        self.children_nodes = []
-        self.action = ""
-        self.path_cost = 0
-        self.depth = 0
-
-class Problem:
-
-    def __init__(self):
-        self.initial_state = None
-        self.goal_test = None
-        self.successor_fn = None
-        self.step_cost = None
-
-def treeSearch(problem):
-    fringe = []
-    fringe.append(Node(problem.initial_state))
-
-    while 1:
-        if(len(fringe) == 0):
-            return -1
-
-        node = fringe.pop()
-        if(problem.goal_test(node) == True):
-            return node
-
-        for n in expand(node, problem):
-            fringe.append(n)
-
-
-def expand(node, problem):
-    successors = []
-    for (action, result) in problem.successor_fn(node.state):
-        n = Node()
-        n.state = result[0]
-        n.parent_node = node
-        n.action = action
-        n.path_cost = node.path_cost + problem.step_cost(node, action)
-        n.depth = node.depth + 1
-        n.children_nodes = []
-        node.children_nodes.append(n)
-        successors.append(n)
-    return  successors
-
-def SF(state):
-    res = []
-    for neighbor in state.neighbors:
-        info = (neighbor[0].name, neighbor)
-        res.append(info)
-
-    return res
-
-def step_cost(node, action):
-    for neighbor in node.state.neighbors:
-        if(neighbor[0].name == action):
-            return neighbor[1]
-    return -1
-
-a = City("A")
-b = City("B")
-c = City("C")
-d = City("D")
-
-a.addNeighbor(b, 10)
-b.addNeighbor(c, 15)
-c.addNeighbor(d, 6)
 
 problem = Problem()
-problem.initial_state = a
-problem.goal_test = lambda n : n.state.name == "D"
-problem.successor_fn = SF
+problem.initial_state = arad
+problem.goal_test = lambda n : n.state.name == "Bucharest"
+problem.successor_fn = successor_fn
 problem.step_cost = step_cost
+problem.heuristic_fn = heuristic_fn
 
-print(treeSearch(problem))
+for city in arad.neighbors:
+    print(city[0].name)
+
+#res = treeSearch(problem)
+res2 = aStarSearch(problem)
+#print(res.path_cost)
+#print(res.parent_node.state.name)
+print(res2.path_cost)
+#print(res2.parent_node.state.name)
