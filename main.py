@@ -1,5 +1,6 @@
 from route_finding import City, step_cost, successor_fn, heuristic_fn
-from tree_search import Problem, treeSearch, aStarSearch
+from tree_search import Problem, treeSearch, aStarSearch, depthFirstSearch
+from guppy import hpy
 
 oradea = City("Oradea")
 zerind = City("Zerind")
@@ -21,6 +22,9 @@ vaslui = City("Vaslui")
 urziceni = City("Urziceni")
 hirsova = City("Hirsova")
 eforie = City("Eforie")
+
+
+
 
 oradea.addNeighbor(zerind, 71)
 oradea.addNeighbor(sibiu, 151)
@@ -48,18 +52,17 @@ hirsova.addNeighbor(eforie, 86)
 
 
 problem = Problem()
-problem.initial_state = arad
+problem.initial_state = rimnicu_vilcea
 problem.goal_test = lambda n : n.state.name == "Bucharest"
 problem.successor_fn = successor_fn
 problem.step_cost = step_cost
 problem.heuristic_fn = heuristic_fn
 
-for city in arad.neighbors:
-    print(city[0].name)
-
 #res = treeSearch(problem)
-res2 = aStarSearch(problem)
+#res2 = aStarSearch(problem)
 #print(res.path_cost)
 #print(res.parent_node.state.name)
-print(res2.path_cost)
+#print(res2.path_cost)
 #print(res2.parent_node.state.name)
+res = depthFirstSearch(problem)
+print(res.parent_node.state.name)

@@ -33,11 +33,34 @@ def treeSearch(problem):
         for n in expand(node, problem):
             fringe.append(n)
 
+def depthFirstSearch(problem):
+    fringe = []
+    fringe.append(Node(problem.initial_state))
+
+    while 1:
+        if(len(fringe) == 0):
+            return -1
+
+        node = fringe.pop() #gives us the last element
+        print("Expanding", node.state.name)
+        if(problem.goal_test(node) == True):
+            return node
+
+        new_nodes = expand(node, problem)
+
+        if(new_nodes == []):
+            node.parent_node.children_nodes.remove(node)
+
+        for n in new_nodes:
+            if(n != node.parent_node):
+                fringe.append(n)
+            #else : discard
+
+
 def aStarSearch(problem):
     fringe = []
     fringe.append(Node(problem.initial_state))
-    min_node = None
-    min_num = 0
+
     while 1:
         if(len(fringe) == 0):
             return -1
@@ -58,6 +81,7 @@ def aStarSearch(problem):
 
         for n in expand(node, problem):
             fringe.append(n)
+
 
 def expand(node, problem):
     successors = []
