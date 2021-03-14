@@ -26,7 +26,6 @@ def treeSearch(problem):
             return -1
 
         node = fringe.pop(0)
-        print("Expanding ", node.state.name)
         if(problem.goal_test(node) == True):
             return node
 
@@ -34,15 +33,19 @@ def treeSearch(problem):
             fringe.append(n)
 
 def depthFirstSearch(problem):
+    iteration=0
     fringe = []
     fringe.append(Node(problem.initial_state))
 
     while 1:
+        iteration+=1
+        if(iteration % 1000 == 0):
+            iteration=0
+            print(iteration)
         if(len(fringe) == 0):
             return -1
 
         node = fringe.pop() #gives us the last element
-        print("Expanding", node.state.name)
         if(problem.goal_test(node) == True):
             return node
 
@@ -75,13 +78,39 @@ def aStarSearch(problem):
 
         node = min_node
         fringe.remove(node)
-        print("Expanding ", node.state.name)
         if(problem.goal_test(node) == True):
             return node
 
         for n in expand(node, problem):
             fringe.append(n)
 
+
+def expand(node, problem):
+    successors = []
+    skip = False
+    for (action, result) in problem.successor_fn(node.state):
+        actual = node
+        for i in range(node.depth):
+            actual = actual.parent_node
+            if (actual != None and result[0] == actual.state):
+                skip = True # skip this iteration so that we don't add repeated states
+                break
+
+        if(not skip):
+            n = Node()
+            n.state = result[0]
+            n.parent_node = node
+            n.action = action
+            n.path_cost = node.path_cost + problem.step_cost(node, action)
+            n.depth = node.depth + 1
+            n.children_nodes = []
+            node.children_nodes.append(n)
+            successors.append(n)
+        skip = False
+
+    return  successors
+
+'''
 
 def expand(node, problem):
     successors = []
@@ -98,4 +127,4 @@ def expand(node, problem):
         node.children_nodes.append(n)
         successors.append(n)
     return  successors
-
+'''
