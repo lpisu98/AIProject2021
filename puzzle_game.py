@@ -1,6 +1,6 @@
 from copy import deepcopy
 
-
+# class for puzzle game problem
 class PuzzleGame:
 
     def __init__(self, grid=None):
@@ -11,10 +11,10 @@ class PuzzleGame:
     def __eq__(self, other):
         return self.grid == other.grid
 
-
 class PuzzleGameUtils:
 
-    def heuristic_fn(state):
+    # misplaced tiles heuristic
+    def heuristic_misplaced(state):
         grid = state.grid
         goal = [[1,2,3],[4,5,6],[7,8,-1]]
         misplaced = 0
@@ -25,6 +25,19 @@ class PuzzleGameUtils:
                     misplaced+=1
 
         return misplaced
+
+    # manhattan distance heuristic
+    def heuristic_manhattan(state):
+        grid = state.grid
+        goal = [[1,2,3],[4,5,6],[7,8,-1]]
+        manhattan = 0
+
+        for i in range(1,9):
+            coord_grid = [(index, row.index(i)) for index, row in enumerate(grid) if i in row]
+            coord_goal = [(index, row.index(i)) for index, row in enumerate(goal) if i in row]
+            manhattan += abs(coord_goal[0][0] - coord_grid[0][0]) + abs(coord_goal[0][1] - coord_grid[0][1])
+
+        return manhattan
 
     def successor_fn(state):
         grid = state.grid

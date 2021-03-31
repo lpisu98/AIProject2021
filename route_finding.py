@@ -1,3 +1,4 @@
+# class City for route finding
 class City:
 
     def __init__(self, name):
@@ -8,11 +9,14 @@ class City:
         city.neighbors.append((self, cost))
         self.neighbors.append((city, cost))
 
+    # eq is useful to directly compare cities with ==
     def __eq__(self, other):
         return self.name == other.name
 
+# static class with methods useful for the problem instatiation
 class RouteFindingUtils:
 
+    # straight line heuristic
     def heuristic_fn(state):
         values = {"Arad":366, "Bucharest":0, "Craiova":160, "Drobeta":242, "Eforie":161,
                   "Fagaras":176, "Giurgiu": 77, "Hirsova":151, "Iasi":226, "Lugoj":244,
