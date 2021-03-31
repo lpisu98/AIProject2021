@@ -1,3 +1,4 @@
+# class Node defined following the course book and slides
 class Node:
 
     def __init__(self, state = None):
@@ -8,6 +9,7 @@ class Node:
         self.path_cost = 0
         self.depth = 0
 
+# class Problem defined following the course book and slides
 class Problem:
 
     def __init__(self):
@@ -17,9 +19,10 @@ class Problem:
         self.step_cost = None
         self.heuristic_fn = None
 
+# static class that contains the algorithm implementations
 class SearchStrategies:
 
-
+    # breadth first
     def breadthFirstSearch(problem):
         fringe = []
         expanded_nodes = 1
@@ -41,6 +44,7 @@ class SearchStrategies:
                 total_nodes += 1
                 fringe.append(n)
 
+    # depth first
     def depthFirstSearch(problem):
         fringe = []
         expanded_nodes = 1
@@ -98,7 +102,7 @@ class SearchStrategies:
                     else:
                         break
 
-
+    # A*
     def aStarSearch(problem):
         fringe = []
         expanded_nodes = 1
@@ -128,7 +132,8 @@ class SearchStrategies:
                 total_nodes += 1
                 fringe.append(n)
 
-
+# function for expanding the nodes in a problem using the successor function and disregarding repeated nodes
+# by checking if the child node is equal to the father
 def expand(node, problem):
     successors = []
     for (action, result) in problem.successor_fn(node.state):
@@ -145,6 +150,8 @@ def expand(node, problem):
         successors.append(n)
     return  successors
 
+# this expansion method checked for repeated nodes in the path from root to child but in the end I didn't use it
+# as it was too computationally heavy
 '''
 def expand(node, problem):
     successors = []
